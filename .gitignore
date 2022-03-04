@@ -1,0 +1,7 @@
+.idea/
+.gradle/
+cache/
+build/
+logs/
+
+bugly.properties
