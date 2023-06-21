@@ -4,9 +4,9 @@ import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
-import java.io.Serializable
 
 const val BASE_URL = "https://bugly.qq.com/v4/api/old/"
+const val BASE_SEARCH_URL = "https://bugly.qq.com/v2/"
 
 // https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Cache-Control
 const val CACHE_NO = "no-store"
@@ -25,6 +25,7 @@ private const val GET_CRASH_LIST = "get-crash-list"
 private const val GET_CRASH_DETAIL = "get-crash-detail"
 private const val GET_CRASH_ATTACHMENT = "get-crash-attachment"
 private const val GET_LAST_CRASH = "get-last-crash"
+private const val SEARCH_ISSUE = "search"
 
 interface BuglyService {
 
@@ -58,7 +59,7 @@ interface BuglyService {
     ): Observable<BuglyResult<IssueInfo>>
 
     @GET(GET_ISSUE_LIST)
-    fun getIssueList(
+    suspend fun getIssueList(
         @Query("appId") appId: String,
         @Query("start") start: Int,
         @Query("searchType") searchType: String,//=errorType&
@@ -69,10 +70,10 @@ interface BuglyService {
         @Query("rows") rows: String,//=100&
         @Query("sortField") sortField: String,//=uploadTime&
         @Header("Cache-Control") cacheControl: String = CACHE_MINUTE,
-    ): Observable<BuglyResult<IssueList>>
+    ): BuglyResult<IssueList>
 
     @GET(GET_CRASH_LIST)
-    fun getCrashList(
+    suspend fun getCrashList(
         @Query("appId") appId: String,
         @Query("pid") pid: Int,
         @Query("start") start: Int,//=100&
@@ -80,26 +81,29 @@ interface BuglyService {
         @Query("exceptionTypeList") exceptionTypeList: String,//=Crash,Native,ExtensionCrash&
         @Query("crashDataType") crashDataType: String = "unSystemExit",
         @Query("platformId") platformId: Int,//=1
-        @Query("issueId") issueId: Int,//=1567363&
+        @Query("issueId") issueId: String,//=1567363&
+        @Query("version") version: String,
+        @Query("startDateStr") startDateStr: String,
+        @Query("endDateStr") endDateStr: String,
         @Query("rows") rows: Int,//=100&
         @Header("Cache-Control") cacheControl: String = CACHE_HOUR,
-    ): Observable<BuglyResult<CrashList>>
+    ): BuglyResult<CrashList>
 
     @GET(GET_CRASH_DETAIL)
-    fun getCrashDetail(
+    suspend fun getCrashDetail(
         @Query("appId") appId: String,
         @Query("pid") pid: Int,
         @Query("crashHash") crashHash: String,
         @Header("Cache-Control") cacheControl: String = CACHE_MAX,
-    ): Observable<BuglyResult<CrashDetail>>
+    ): BuglyResult<CrashDetail>
 
     @GET(GET_CRASH_ATTACHMENT)
-    fun getCrashAttachment(
+    suspend fun getCrashAttachment(
         @Query("appId") appId: String,
         @Query("pid") pid: Int,
         @Query("crashHash") crashHash: String,
         @Header("Cache-Control") cacheControl: String = CACHE_MAX,
-    ): Observable<BuglyResult<CrashAttachment>>
+    ): BuglyResult<CrashAttachment>
 
     @GET(GET_LAST_CRASH)
     fun getLastCrash(
@@ -109,4 +113,26 @@ interface BuglyService {
         @Query("crashDataType") crashDataType: String,
         @Header("Cache-Control") cacheControl: String = CACHE_MINUTE,
     ): Observable<BuglyResult<CrashMap>>
+}
+
+interface BuglySearchService {
+
+    @GET(SEARCH_ISSUE)
+    suspend fun searchIssue(
+        @Query("appId") appId: String,
+        @Query("pid") pid: Int,
+        @Query("start") start: Int,//=100&
+        @Query("errorType") errorType: String,//=100&
+        @Query("hardware") hardware: String,
+        @Query("osVersion") osVersion: String,
+        @Query("platformId") platformId: Int,//=1
+        @Query("version") appVersion: String,
+        @Query("date") date: String,
+        @Query("startDateStr") startDateStr: String,
+        @Query("endDateStr") endDateStr: String,
+        @Query("sortOrder") sortOrder: String,
+        @Query("sortField") sortField: String,
+        @Query("rows") rows: Int,//=100&
+        @Header("Cache-Control") cacheControl: String = CACHE_HOUR,
+    ): BuglySearchResult<IssueList>
 }

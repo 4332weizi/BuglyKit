@@ -10,6 +10,12 @@ data class BuglyResult<T>(
     val timestamp: String
 ) : Serializable
 
+data class BuglySearchResult<T>(
+    val status: Int,
+    val msg: String,
+    val ret: T
+) : Serializable
+
 data class CrashList(
     val issueList: List<String>,
     val crashIdList: List<String>,
@@ -130,7 +136,7 @@ data class File(
     val fileName: String,
     val codeType: Int,
     val fileType: Int,
-    val fileContent: String,
+    val content: String,
 ) : Serializable
 
 data class IssueList(
@@ -182,7 +188,7 @@ data class TagInfo(
 data class CrashAttachment(
     val attachName: String,
     val stackName: String,
-    val attachList: List<File>,
+    val attachList: List<File>?,
     val reponseCode: Int,
     val reponseDesc: String,
     val sysLogs: List<String>,

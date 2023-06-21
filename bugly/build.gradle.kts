@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.0"
+    kotlin("jvm") version "1.8.20"
     `java-library`
 }
 
@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     api("io.reactivex.rxjava3:rxjava:3.1.3")
     api("io.reactivex.rxjava3:rxkotlin:3.0.1")
     api("com.squareup.okhttp3:okhttp:4.9.3")

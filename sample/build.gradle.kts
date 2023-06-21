@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.0"
+    kotlin("jvm") version "1.8.20"
     application
 }
 
@@ -14,6 +14,8 @@ repositories {
 
 dependencies {
     implementation(project(":bugly"))
+    implementation("org.apache.poi:poi:4.1.2")
+    implementation("org.apache.poi:poi-ooxml:4.1.2")
     testImplementation(kotlin("test-junit"))
 }
 
