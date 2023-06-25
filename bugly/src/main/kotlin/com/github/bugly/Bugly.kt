@@ -15,6 +15,7 @@ private val properties = Properties().apply {
 }
 
 private val cookie = properties["cookie"].toString()
+private val xToken = properties["x-token"].toString()
 private val cacheSize = properties["cache.size"].toString().toLong()
 private val cacheDir = properties["cache.dir"].toString()
 
@@ -46,7 +47,7 @@ private val searchRetrofit: Retrofit = Retrofit.Builder()
                     maxSize = cacheSize * 1024 * 1024 * 1024
                 )
             )
-            .addInterceptor(SearchHeadersInterceptor(cookie))
+            .addInterceptor(SearchHeadersInterceptor(cookie, xToken))
             .sslSocketFactory(createSSLSocketFactory(), TrustAllManager())
             .build()
     )

@@ -102,9 +102,10 @@ fun addCellsToRow(dest: Row, start: Int, args: Array<String>) {
 }
 
 suspend fun findIssueByIdentifier(crashRecord: CrashRecord, start: Int = 0): Issue? {
+    if (!crashRecord.platform.contains("bugly")) return null
     println("search issue in issue list start by: $start")
     val issues = searchIssueList(crashRecord, start)
-    println("issues find: ${issues?.numFound}")
+    println("issues find: ${issues?.numFound ?: 0}")
     val issue = issues?.issueList?.find {
         findCrashByIdentifier(crashRecord, it) != null
     }
